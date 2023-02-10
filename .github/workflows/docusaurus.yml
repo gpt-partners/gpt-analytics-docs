@@ -17,4 +17,7 @@ jobs:
     - run: npm install
     - run: npm run build
     - run: echo 'gpt-analytics.gpt-partners.com' > ./build/CNAME 
+    - run: pwd
+    - run: ls
+    - run: ls build
     - run: git subtree push --prefix build origin gh-pages
