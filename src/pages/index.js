@@ -18,7 +18,7 @@ function HomepageHeader() {
           <Link
             className="button button--secondary button--lg"
             to="/docs/intro">
-            GPT Analytics Tutorial - Start in 5min ⏱️
+            GPT Analytics Tutorial - 3min ⏱️
           </Link>
         </div>
       </div>
