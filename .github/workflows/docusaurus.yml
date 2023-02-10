@@ -2,14 +2,25 @@ name: Docusaurus site CI
 
 on:
   push:
-    branches: [ master, upgrade ]
+    branches: [ master ]
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: true
 
 jobs:
   build:
+    environment:
+      name: github-pages
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
-
+    - uses: actions/configure-pages@v3
     - uses: actions/setup-node@v3
       with:
         node-version: '16'
@@ -17,7 +28,7 @@ jobs:
     - run: npm install
     - run: npm run build
     - run: echo 'gpt-analytics.gpt-partners.com' > ./build/CNAME 
-    - run: pwd
-    - run: ls
-    - run: ls build
-    - run: git subtree push --prefix build origin gh-pages
+    - uses: actions/upload-pages-artifact@v1
+      with:
+        path: 'build'
+    - uses: actions/deploy-pages@v1
