@@ -1,0 +1,38 @@
+name: Docusaurus site CI
+
+on:
+  push:
+    branches: [ master, upgrade ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+
+    - uses: actions/setup-node@v3
+      with:
+        node-version: '16'
+        cache: 'npm'
+    - run: npm install
+    - run: npm run build
+        
+    - name: Deploy to Static Host 01
+      uses: burnett01/rsync-deployments@5.2
+      with:
+        switches: -avzr --delete
+        path: build/
+        remote_path: /var/www/docs/
+        remote_host: ${{ secrets.DEPLOY_STATIC_SITE_HOST01 }}
+        remote_user: ${{ secrets.DEPLOY_STATIC_SITE_USER }}
+        remote_key: ${{ secrets.DEPLOY_STATIC_SITE_KEY }}
+
+    - name: Deploy to Static Host 02
+      uses: burnett01/rsync-deployments@5.2
+      with:
+        switches: -avzr --delete
+        path: build/
+        remote_path: /var/www/docs/
+        remote_host: ${{ secrets.DEPLOY_STATIC_SITE_HOST02 }}
+        remote_user: ${{ secrets.DEPLOY_STATIC_SITE_USER }}
+        remote_key: ${{ secrets.DEPLOY_STATIC_SITE_KEY }}
